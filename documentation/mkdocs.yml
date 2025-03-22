@@ -1,0 +1,7 @@
+site_name: picocell
+nav:
+  - Home: index.md
+  - Methods: methods.md
+  - Results: results.md
+  - Introduction: introduction.md
+

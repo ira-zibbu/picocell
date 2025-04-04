@@ -1,1 +1,7 @@
-src/EvolvePro
+output/
+tmp/
+run/02_mutant_fasta/
+run/04_embeddings/
+src/EvolvePro/
+src/scripts/__pycache__/
+run/05_rf_model/

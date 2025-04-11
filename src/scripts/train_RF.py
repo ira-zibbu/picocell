@@ -24,7 +24,7 @@ def load_DMS_data(path_to_DMS_data):
     Load the DMS xlsx data as a dataframe
     """
     df_dms = pd.read_excel(path_to_DMS_data)
-    print(f"Size of dms data is {df_dms.shape}")
+    #print(f"Size of dms data is {df_dms.shape}")
     return df_dms
 
 

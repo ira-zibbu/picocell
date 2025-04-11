@@ -301,6 +301,11 @@ def main(output, no_selection, drift):
         cell_master_list=cell_master_list+list_of_children # keeping a tab on the kids!
         list_of_parents = list_of_parents+list_of_children # all children born this generation become children of the next generation
 
+    # update death times for all cells that made it to the end
+
+    for cells in cell_master_list:
+        if cells.death == 0:
+            cells.death = generation+1
 
     output_data(cell_master_list,output)
 

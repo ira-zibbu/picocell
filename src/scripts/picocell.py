@@ -26,6 +26,9 @@ parser = argparse.ArgumentParser(description='Picocell.py, a model of evolution'
 parser.add_argument('--output', help='Path to output the results of the run')
 parser.add_argument('--no_selection', action='store_true', help='Disable natural selection')
 parser.add_argument('--drift', help='Set genetic drift level (0-1).')
+parser.add_argument('--generations', help='Number of generations to run the simulation for')
+parser.add_argument('--mutation_rate', help='Per base per generation mutation rate (float)')
+
 
 class cell:
 
@@ -131,16 +134,19 @@ def fetch_fitness(wt_aa_sequence,aa_sequence,path_to_dms,path_to_rf_model):
 
     print(mutant_sites)
 
-    # if only one mutation is present wrt to wildtype sequence, attempt to find it in the dms data and fetch fitness score from them
+    variant_in_dms_data = False
+    # if only one mutation is present wrt to wildtype sequence, attempt to find it in the dms data and fetch fitness score from them. If it does not exist in the table,
     if len(mutant_sites) == 1:
         variant = mutant_sites[0]
-        fitness = df_dms[df_dms["variant"] == variant]["avg_activity"].iloc[0]
-        return fitness
+        match = df_dms[df_dms["variant"] == variant]
+        if not match.empty:
+            variant_in_dms_data = True
+            return match["avg_activity"].iloc[0]
 
     # else load rf model
     rf_model = None
 
-    if len(mutant_sites) > 1:
+    if (len(mutant_sites) > 1 or not(variant_in_dms_data)): # use the rf model if there are more than one mutant sites of it the mutant site is not in the dms dataset
         rf_model = joblib.load(path_to_rf_model)
 
     # extract embeddings for the new amino acid sequence
@@ -234,7 +240,7 @@ def output_data(list_of_cells, output):
             writer.writerow(obj.__dict__.values())
 
 
-def main(output, no_selection, drift):
+def main(output, no_selection, drift,generations, mutation_rate):
 
     print("================================")
     print("       _                    _ _ ")
@@ -251,12 +257,13 @@ def main(output, no_selection, drift):
     print(f"Natural selection present? {not(no_selection)}")
     print(f"Genetic drift level? {drift}")
 
+    mutation_rate = float(mutation_rate)
     path_to_fasta = "run/01_wildtype/cas12f_WT_dna.fasta"
     wt_dna = SeqIO.read(path_to_fasta,"fasta")
     wt_aa = "MIKVYRYEIVKPLDLDWKEFGTILRQLQQETRFALNKATQLAWEWMGFSSDYKDNHGEYPKSKDILGYTNVHGYAYHTIKTKAYRLNSGNLSQTIKRATDRFKAYQKEILRGDMSIPSYKRDIPLDLIKENISVNRMNHGDYIASLSLLSNPAKQEMNVKRKISVIIIVRGAGKTIMDRILSGEYQVSASQIIHDDRKNKWYLNISYDFEPQTRVLDLNKIMGIDLGVAVAVYMAFQHTPARYKLEGGEIENFRRQVESRRISMLRQGKYAGGARGGHGRDKRIKPIEQLRDKIANFRDTTNHRYSRYIVDMAIKEGCGTIQMEDLTNIRDIGSRFLQNWTYYDLQQKIIYKAEEAGIKVIKIDPQYTSQRCSECGNIDSGNRIGQAIFKCRACGYEANADYNAARNIAIPNIDKIIAESIK"
     kappa = 0.5
     list_of_parents=[]
-    list_of_parents.append(cell(1,wt_dna.seq,wt_aa,1.0,0.001,0,0))
+    list_of_parents.append(cell(1,wt_dna.seq,wt_aa,1.0,mutation_rate,0,0))
 
     print(f"Number of starting cells: {len(list_of_parents)}")
     print("Information about starting cells:")
@@ -268,7 +275,7 @@ def main(output, no_selection, drift):
 
     path_to_dms = "run/03_dms_data/DMS_AsCas12f_preprocessed.xlsx"
     path_to_rf_model = "run/05_rf_model/rf_model.pkl"
-    number_of_generations = 5
+    number_of_generations = int(generations)
     cell_counter = 1 # keep a count of how many cells are present
     drift=float(drift)
     cell_master_list = list_of_parents # a list of all cells that have ever lived or died
@@ -299,7 +306,7 @@ def main(output, no_selection, drift):
             del list_of_parents[index]
 
         cell_master_list=cell_master_list+list_of_children # keeping a tab on the kids!
-        list_of_parents = list_of_parents+list_of_children # all children born this generation become children of the next generation
+        list_of_parents = list_of_parents+list_of_children # all children born this generation become parents of the next generation
 
     # update death times for all cells that made it to the end
 
@@ -312,4 +319,4 @@ def main(output, no_selection, drift):
 
 if __name__ == "__main__":
     args = parser.parse_args()
-    main(args.output, args.no_selection, args.drift)
+    main(args.output, args.no_selection, args.drift, args.generations, args.mutation_rate)

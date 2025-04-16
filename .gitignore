@@ -5,3 +5,7 @@ run/04_embeddings/
 src/EvolvePro/
 src/scripts/__pycache__/
 run/05_rf_model/
+run/06_output/
+run/07_log/
+src/scripts/*.csv
+src/scripts/*.Rmd

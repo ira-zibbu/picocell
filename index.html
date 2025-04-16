@@ -18,7 +18,20 @@
         <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" >
         <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
-        <script>hljs.highlightAll();</script> 
+        <script>hljs.highlightAll();</script>
+   
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+
     </head>
 
     <body class="homepage">
@@ -38,16 +51,19 @@
                                 <a href="." class="nav-link active" aria-current="page">Home</a>
                             </li>
                             <li class="nav-item">
+                                <a href="introduction/" class="nav-link">Introduction</a>
+                            </li>
+                            <li class="nav-item">
                                 <a href="methods/" class="nav-link">Methods</a>
                             </li>
                             <li class="nav-item">
                                 <a href="results/" class="nav-link">Results</a>
                             </li>
                             <li class="nav-item">
-                                <a href="introduction/" class="nav-link">Introduction</a>
+                                <a href="code/" class="nav-link">Code</a>
                             </li>
                             <li class="nav-item">
-                                <a href="code/" class="nav-link">Code</a>
+                                <a href="refs/" class="nav-link">References</a>
                             </li>
                         </ul>
 
@@ -63,7 +79,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a rel="next" href="methods/" class="nav-link">
+                                <a rel="next" href="introduction/" class="nav-link">
                                     Next <i class="fa fa-arrow-right"></i>
                                 </a>
                             </li>
@@ -95,7 +111,7 @@
                     <div class="col-md-9" role="main">
 
 <h1 id="picocell">picocell</h1>
-<p>picocell is a protein-language guided model of cellular evolution. picocell was made for BCH394P in Spring 2025 at UT Austin.</p>
+<p><code>picocell</code> is a protein-language model guided simulation of cellular evolution. <code>picocell</code> was made for BCH394P in Spring 2025 at UT Austin.</p>
 <p>To get started:</p>
 <ul>
 <li><a href="introduction/">Read an introduction to the project</a></li>
@@ -105,7 +121,7 @@
 <li><a href="https://github.com/ira-zibbu/picocell/">Peek the source code</a></li>
 </ul>
 <p><img alt="banner" src="banner.png" />
-<em>Evolution is overrated! I am doing just fine without it. Now tell me more about this 'machine learning' thing you say you are doing..</em> </p></div>
+<em>Evolution is overrated! I've been doing just fine without it. Now tell me more about this 'machine learning' thing you say you are doing..</em> </p></div>
             </div>
         </div>
 
@@ -119,6 +135,7 @@
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
         <script src="js/base.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
         <script src="search/main.js"></script>
 
         <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
@@ -187,5 +204,5 @@
 
 <!--
 MkDocs version : 1.6.1
-Build Date UTC : 2025-04-16 01:15:19.872057+00:00
+Build Date UTC : 2025-04-16 21:35:20.798236+00:00
 -->

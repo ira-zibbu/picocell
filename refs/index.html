@@ -8,7 +8,7 @@
         
         
         <link rel="shortcut icon" href="../img/favicon.ico">
-        <title>Code - picocell</title>
+        <title>References - picocell</title>
         <link href="../css/bootstrap.min.css" rel="stylesheet">
         <link href="../css/fontawesome.min.css" rel="stylesheet">
         <link href="../css/brands.min.css" rel="stylesheet">
@@ -60,10 +60,10 @@
                                 <a href="../results/" class="nav-link">Results</a>
                             </li>
                             <li class="nav-item">
-                                <a href="./" class="nav-link active" aria-current="page">Code</a>
+                                <a href="../code/" class="nav-link">Code</a>
                             </li>
                             <li class="nav-item">
-                                <a href="../refs/" class="nav-link">References</a>
+                                <a href="./" class="nav-link active" aria-current="page">References</a>
                             </li>
                         </ul>
 
@@ -74,12 +74,12 @@
                             </a>
                         </li>
                             <li class="nav-item">
-                                <a rel="prev" href="../results/" class="nav-link">
+                                <a rel="prev" href="../code/" class="nav-link">
                                     <i class="fa fa-arrow-left"></i> Previous
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a rel="next" href="../refs/" class="nav-link">
+                                <a rel="next" class="nav-link disabled">
                                     Next <i class="fa fa-arrow-right"></i>
                                 </a>
                             </li>
@@ -101,7 +101,7 @@
     <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
         <ul class="nav flex-column">
             
-            <li class="nav-item" data-bs-level="1"><a href="#code" class="nav-link">Code</a>
+            <li class="nav-item" data-bs-level="1"><a href="#references" class="nav-link">References</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -110,122 +110,34 @@
 </div></div>
                     <div class="col-md-9" role="main">
 
-<h1 id="code">Code</h1>
-<h3 id="set-up">Set up</h3>
-<p>Begin by cloning this repository</p>
-<pre><code>git clone https://github.com/ira-zibbu/picocell.git
-</code></pre>
-<p>Create the picocell conda environment</p>
-<pre><code>cd picocell
-conda env create -f picocell.yaml
-</code></pre>
-<p>This additional submodule is also required</p>
-<pre><code>cd picocell/src/
-git submodule add https://github.com/ira-zibbu/EvolvePro
-</code></pre>
-<p>Create the necessary environments</p>
-<pre><code>cd EvolvePro
-conda env create -f environment.yml
-sh setup_plm.sh
-</code></pre>
-<h3 id="training-the-regressor">Training the regressor</h3>
-<p>The first part requires us to a build a regression model that maps the embeddings of the proteins to their actvitiy or fitness. We will use a deep mutational scanning dataset of cas12f protein to train the regressor.</p>
-<p>First, we need to generate a FASTA file of all possible single amino acid substitution variants of the wildtype cas12a sequence. </p>
-<pre><code>conda activate evolvepro
-./trial_run.py --file ../../run/01_wildtype/cas12f_WT.fasta --output ../../run/02_mutant_fasta/cas12f_aa_mutants.fasta
-conda deactivate evolvepro
-</code></pre>
-<p>With all the mutants generated, we can now use a PLM to generated embeddings. We will use ESM1 (650M) model, and average the embeddings across all of the amino acids.</p>
-<pre><code>conda activate plm
-python3 evolvepro/plm/esm/extract.py  esm1b_t33_650M_UR50S ../../run/02_mutant_fasta/cas12f_aa_mutants.fasta  ../../run/04_embeddings/casf21f_esm1b_t33_650M_UR50S --toks_per_batch 512 --include mean --concatenate_dir ../../run/04_embeddings
-conda deactivate plm
-</code></pre>
-<p>Using these embeddings, and the deep mutational scanning dataset, we can train a random forest regressor to learn to map the embeddings to the activity of the protein (which in this case is also the fitness of the protein.</p>
-<pre><code>conda activate picocell
-src/scripts/train_RF.py --dms run/03_dms_data/DMS_AsCas12f_preprocessed.xlsx --embeddings run/04_embeddings/cas12f_aa_mutants_esm1b_t33_650M_UR50S.csv --model_path run/05_rf_model/rf_model.pkl 
-conda deactivate picocell
-</code></pre>
-<p>This step can take a few hours on a personal computer. This outputs a pickle object of the model in <code>run/05_rf_model</code>. </p>
-<h3 id="running-picocell">Running picocell</h3>
-<p>Picocell needs its own conda environment</p>
-<pre><code>conda activate picocell
-</code></pre>
-<p>Here is the general usage for picocell:</p>
-<pre><code>usage: picocell.py [-h] [--output OUTPUT] [--no_selection] [--drift DRIFT] [--generations GENERATIONS] [--mutation_rate MUTATION_RATE]
-
-Picocell.py, a model of evolution
-
-options:
-  -h, --help            show this help message and exit
-  --output OUTPUT       Path to output the results of the run
-  --no_selection        Disable natural selection
-  --drift DRIFT         Set genetic drift level (0-1).
-  --generations GENERATIONS
-                        Number of generations to run the simulation for
-  --mutation_rate MUTATION_RATE
-                        Per base per generation mutation rate (float)
-</code></pre>
-<p>The <code>output</code> is a csv file, with the following fields:</p>
+<h1 id="references">References</h1>
+<ol>
+<li>
+<p>Hino, T. et al. (2023). An AsCas12f-based compact genome-editing tool derived by deep mutational scanning and structural analysis. Cell, 186(22), 4920–4935.e23. https://doi.org/10.1016/j.cell.2023.08.031</p>
+</li>
+<li>
+<p>Kaiyi Jiang et al. (2025). Rapid in silico directed evolution by a protein language model with EVOLVEpro. Science. DOI:10.1126/science.adr6006</p>
+</li>
+<li>
+<p>Roshan Rao et al. (2021). MSA Transformer. bioRxiv. doi: https://doi.org/10.1101/2021.02.12.430858 </p>
+</li>
+<li>
+<p>Wickham H (2016). ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York. ISBN 978-3-319-24277-4</p>
+</li>
+<li>
+<p>Pedregosa et al. (2011) Scikit-learn: Machine Learning in Python, JMLR 12, pp. 2825-2830, 2011.</p>
+</li>
+<li>
+<p>Wilke C (2024). cowplot: Streamlined Plot Theme and Plot Annotations for 'ggplot2'. R package version 1.1.3, https://wilkelab.org/cowplot/.</p>
+</li>
+</ol>
+<p>Special thanks to:</p>
 <ul>
-<li>Cell ID</li>
-<li>DNA sequence</li>
-<li>Amino acid sequence</li>
-<li>Fitness</li>
-<li>Mutation rate</li>
-<li>Generation (aka when was this cell born)</li>
-<li>Death (aka when did this cell die)</li>
-</ul>
-<p>Here's is an example usage and output:</p>
-<pre><code>src/scripts/picocell.py --output run/06_output/run_2.csv --drift 0 --generations 20  --mutation_rate 0.001
-</code></pre>
-<p>This run has no genetic drift at play, goes for 20 generations and uses a fairly high mutation rate. Remember, cells divide exponentially, so make sure you limit the total number of generations.</p>
-<pre><code>================================
-       _                    _ _ 
-      (_)                  | | |
-_ __  _  ___ ___   __ _ ___| | |
-| '_ || |/ __/ _ | / __/ _ | | |
-| |_) | | (_| (_) | (_|  __/ | |
-| .__/|_||___|___/ |___|___|_|_|
-| |                             
-|_|                             
-================================
-Picocell is a PLM-based model of cellular evolution
-Initial parameters (loading)...
-Natural selection present? True
-Genetic drift level? 0
-Number of starting cells: 1
-Information about starting cells:
-Cell #1, with fitness 1.0 and mutation rate 0.01
-Starting simulation...
-generation count is 1
-cell #1 fails to reproduce
-generation count is 2
-cell #1 fails to reproduce
-generation count is 3
-Time for cell #1 to reproduce!
-mutant child with non-synonymous substitution
-['F48Y', 'K96R', 'D100V', 'I109N', 'I166S', 'L337R']
-Subprocess extraction completed successfully.
-Size of embeddings is (1, 1280)
-generation count is 4
-cell #1 fails to reproduce
-cell #2 fails to reproduce
-generation count is 5
-cell #1 fails to reproduce
-cell #2 fails to reproduce
-generation count is 6
-cell #1 fails to reproduce
-Time for cell #2 to reproduce!
-Lethal mutation! This child cell is killed
-generation count is 7
-Time for cell #1 to reproduce!
-mutant child with non-synonymous substitution
-['A172S', 'N296D', 'R335H', 'A400S', 'I416S']
-Subprocess extraction completed successfully.
-Size of embeddings is (1, 1280)
-cell #2 fails to reproduce
-cell #3 fails to reproduce
-</code></pre></div>
+<li>Dr. Marcotte and Zoya Ansari</li>
+<li>Authors of EvolvePro for making their code open source</li>
+<li>Creators of ESM for making the model weights open</li>
+<li>Members of the Wilke Lab and BioML Society at UT Austin for introducing me to PLMs</li>
+</ul></div>
             </div>
         </div>
 

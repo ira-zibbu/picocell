@@ -1,8 +1,17 @@
 site_name: picocell
 nav:
   - Home: index.md
+  - Introduction: introduction.md
   - Methods: methods.md
   - Results: results.md
-  - Introduction: introduction.md
   - Code: code.md
-
+  - References: refs.md
+extra_javascript:
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+markdown_extensions:
+  - admonition
+  - pymdownx.arithmatex:
+      generic: true
+theme:
+  name: mkdocs
+  custom_dir: overrides

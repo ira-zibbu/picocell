@@ -32,7 +32,7 @@ sh setup_plm.sh
 
 ### Training the regressor
 
-The first part requires us to a build a regression model that maps the embeddings of the proteins to their actvitiy or fitness. We will use a deep mutational scanning dataset of cas12a proteins to train the regressor.
+The first part requires us to a build a regression model that maps the embeddings of the proteins to their actvitiy or fitness. We will use a deep mutational scanning dataset of cas12f protein to train the regressor.
 
 First, we need to generate a FASTA file of all possible single amino acid substitution variants of the wildtype cas12a sequence. 
 
@@ -86,7 +86,15 @@ options:
                         Per base per generation mutation rate (float)
 ```
 
-The `output` is a csv file. 
+The `output` is a csv file, with the following fields:
+
+- Cell ID
+- DNA sequence
+- Amino acid sequence
+- Fitness
+- Mutation rate
+- Generation (aka when was this cell born)
+- Death (aka when did this cell die)
 
 Here's is an example usage and output:
 

@@ -1,6 +1,6 @@
 # picocell
 
-picocell is a protein-language guided model of cellular evolution. picocell was made for BCH394P in Spring 2025 at UT Austin.
+`picocell` is a protein-language model guided simulation of cellular evolution. `picocell` was made for BCH394P in Spring 2025 at UT Austin.
 
 To get started:
 
@@ -11,4 +11,4 @@ To get started:
 - [Peek the source code](https://github.com/ira-zibbu/picocell/)
 
 ![banner](banner.png)
-
+_Evolution is overrated! I've been doing just fine without it. Now tell me more about this 'machine learning' thing you say you are doing.._ 
